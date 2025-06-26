@@ -38,12 +38,12 @@ export const Task = ({ task, openModal }: ITaskProps) => {
   };
   return (
     <div
-      className={`flex w-full flex-col gap-5 rounded-[16px] border-2 border-blue-300 p-5 duration-300 ${isTaskExpired && 'border-red-500'}`}
+      className={`flex w-full flex-col gap-5 rounded-[16px] border-2 border-blue-300 p-5 duration-300 ${isTaskExpired && '!border-red-500'} ${task.id === activeTaskId && 'border-green-300'}`}
     >
-      <div className='flex w-full justify-between gap-5 rounded-[8px] bg-white p-3'>
-        <div className='flex max-w-3/5 flex-col gap-3'>
+      <div className='flex flex-col lg:flex-row w-full justify-between gap-5 rounded-[8px] bg-white p-3'>
+        <div className='flex lg:max-w-3/5 overflow-hidden flex-col gap-3'>
           <h4>
-            <span className='font-bold'>Задача:</span> {task.title}{' '}
+            <span className='font-bold'>Задача:</span> {task.title}
             {isTaskExpired && <span className='font-bold'> - просрочена</span>}
           </h4>
           <span className='flex flex-col'>
@@ -52,7 +52,7 @@ export const Task = ({ task, openModal }: ITaskProps) => {
               height={showDescription || task.description.length <= 80 ? 'auto' : 20}
               disableDisplayNone
             >
-              {task.description}{' '}
+              <p className='max-w-full'>{task.description}</p>
             </AnimateHeight>
             {task.description.length > 100 && (
               <button
@@ -65,11 +65,11 @@ export const Task = ({ task, openModal }: ITaskProps) => {
           </span>
         </div>
         <div className='flex flex-col gap-3'>
-          <p className='text-end'>
-            Время на выполнение: {timeExcept.hour} : {timeExcept.minutes}
+          <p className='lg:text-end'>
+            <span className='font-bold'>Время на выполнение:</span> {timeExcept.hour} : {timeExcept.minutes}
           </p>
-          <p className='text-end'>
-            Потраченно времени: {spentTime.hour} : {spentTime.minutes}
+          <p className='lg:text-end'>
+            <span className='font-bold'>Потраченно времени:</span> {spentTime.hour} : {spentTime.minutes}
           </p>
         </div>
       </div>
