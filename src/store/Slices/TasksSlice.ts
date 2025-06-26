@@ -16,7 +16,7 @@ export const tasksSlice = createSlice({
       const { hours, minutes, title, description } = action.payload;
       state.list.push({
         id: uuidv4(),
-        timeExcept: hours * 60 + minutes,
+        timeExcept: hours * 3600 + minutes * 60,
         timeSpent: 0,
         title: title,
         description: description,
@@ -37,7 +37,7 @@ export const tasksSlice = createSlice({
       if (task) {
         task.description = description;
         task.title = title;
-        task.timeExcept = hours * 60 + minutes;
+        task.timeExcept = hours * 3600 + minutes * 60;
       }
       state.editTaskId = null;
       localStorage.setItem('tasks', JSON.stringify(state.list));

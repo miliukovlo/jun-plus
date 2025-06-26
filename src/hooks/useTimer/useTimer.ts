@@ -11,7 +11,7 @@ export const useTimer = () => {
     if (activeTaskId) {
       interval = setInterval(() => {
         dispatch(updateTask());
-      }, 60_000);
+      }, 1_000);
     }
     return () => {
       if (interval) {

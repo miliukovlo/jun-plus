@@ -66,10 +66,10 @@ export const Task = ({ task, openModal }: ITaskProps) => {
         </div>
         <div className='flex flex-col gap-3'>
           <p className='lg:text-end'>
-            <span className='font-bold'>Время на выполнение:</span> {timeExcept.hour} : {timeExcept.minutes}
+            <span className='font-bold'>Время на выполнение:</span> {timeExcept.hour} : {timeExcept.minutes} : {timeExcept.seconds}
           </p>
           <p className='lg:text-end'>
-            <span className='font-bold'>Потраченно времени:</span> {spentTime.hour} : {spentTime.minutes}
+            <span className='font-bold'>Потраченно времени:</span> {spentTime.hour} : {spentTime.minutes} : {spentTime.seconds}
           </p>
         </div>
       </div>

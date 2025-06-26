@@ -28,13 +28,13 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (validate.title(formState.title).status === 'fail') {
+    if (validate.title(formState.title.trim()).status === 'fail') {
       setError({ ...errors, titleError: validate.title(formState.title) });
       return;
     } else {
       setError({ ...errors, titleError: null });
     }
-    if (validate.description(formState.description).status === 'fail') {
+    if (validate.description(formState.description.trim()).status === 'fail') {
       setError({
         ...errors,
         descriptionError: validate.description(formState.description),
