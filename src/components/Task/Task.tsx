@@ -1,20 +1,19 @@
+'use client';
+import { useFormatTime } from '@/hooks';
 import { RootType } from '@/store';
 import { removeTask, setEditId, startTask, stopTask } from '@/store/Slices/TasksSlice';
 import { Button } from '@/UI-KIT';
-import React from 'react';
+import React, { useState } from 'react';
+import AnimateHeight from 'react-animate-height';
 import { useDispatch, useSelector } from 'react-redux';
 import { ITaskProps } from './TaskTypes';
 
 export const Task = ({ task, openModal }: ITaskProps) => {
-  const timeExcept = {
-    hour: String(Math.floor(task.timeExcept / 60)).padStart(2, '0'),
-    minutes: String(task.timeExcept % 60).padStart(2, '0'),
-  };
+  const timeExcept = useFormatTime(task.timeExcept);
 
-  const spentTime = {
-    hour: String(Math.floor(task.timeSpent / 60)).padStart(2, '0'),
-    minutes: String(task.timeSpent % 60).padStart(2, '0'),
-  };
+  const spentTime = useFormatTime(task.timeSpent);
+
+  const [showDescription, setShowDescription] = useState<boolean>(false);
 
   const isTaskExpired = task.timeExcept < task.timeSpent;
 
@@ -44,17 +43,30 @@ export const Task = ({ task, openModal }: ITaskProps) => {
       <div className='flex w-full justify-between gap-5 rounded-[8px] bg-white p-3'>
         <div className='flex flex-col gap-3'>
           <h4>
-            Задача: {task.title}{' '}
+            <span className='font-bold'>Задача:</span> {task.title}{' '}
             {isTaskExpired && <span className='font-bold'> - просрочена</span>}
           </h4>
-          <p>Описание: {task.description}</p>
+          <span className='max-w 3/5 flex flex-col'>
+            <span className='font-bold'>Описание:</span>
+            <AnimateHeight
+              height={showDescription || task.description.length <= 80 ? 'auto' : 20}
+              disableDisplayNone
+            >
+              {task.description}{' '}
+            </AnimateHeight>
+            {task.description.length > 100 && (
+              <button cursor-pointer className='text-left border-b-1 border-transparent duration-150 pb-1 font-bold w-fit cursor-pointer hover:border-black' onClick={() => setShowDescription(!showDescription)}>
+                {showDescription ? 'Скрыть описание' : 'Открыть описание'}
+              </button>
+            )}
+          </span>
         </div>
         <div className='flex flex-col gap-3'>
           <p className='text-end'>
             Время на выполнение: {timeExcept.hour} : {timeExcept.minutes}
           </p>
           <p className='text-end'>
-            Потраченно времени: {spentTime.hour} : {spentTime.minutes}{' '}
+            Потраченно времени: {spentTime.hour} : {spentTime.minutes}
           </p>
         </div>
       </div>

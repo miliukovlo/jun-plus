@@ -14,6 +14,7 @@
     "lodash.debounce": "^4.0.8",
     "next": "15.3.4",
     "react": "^19.0.0",
+    "react-animate-height": "^3.2.3",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "uuid": "^11.1.0"
