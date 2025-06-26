@@ -1,10 +1,11 @@
 'use client';
+import { validate } from '@/hooks';
 import { RootType } from '@/store';
 import { editTask } from '@/store/Slices/TasksSlice';
 import { Button } from '@/UI-KIT';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IFormProps, IFormState } from '../FormTypes';
+import { IFormErrors, IFormProps, IFormState } from '../FormTypes';
 
 export const EditForm = ({ onModalClose }: IFormProps) => {
   const dispatch = useDispatch();
@@ -13,6 +14,11 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
   if (!currentTask) {
     onModalClose();
   }
+  const [errors, setError] = useState<IFormErrors>({
+    titleError: null,
+    descriptionError: null,
+    minuteError: null,
+  });
   const [formState, setFormState] = useState<IFormState>({
     title: currentTask ? currentTask.title : '',
     description: currentTask ? currentTask.description : '',
@@ -21,10 +27,31 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
   });
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (validate.title(formState.title).status === 'fail') {
+      setError({ ...errors, titleError: validate.title(formState.title) });
+      return;
+    } else {
+      setError({ ...errors, titleError: null });
+    }
+    if (validate.description(formState.description).status === 'fail') {
+      setError({
+        ...errors,
+        descriptionError: validate.description(formState.description),
+      });
+      return;
+    } else {
+      setError({ ...errors, descriptionError: null });
+    }
+    if (validate.minute(formState.minutes).status === 'fail') {
+      setError({ ...errors, minuteError: validate.minute(formState.minutes) });
+      return;
+    } else {
+      setError({ ...errors, minuteError: null });
+    }
     if (
-      formState.title !== '' &&
-      formState.description !== '' &&
-      (formState.hours !== 0 || formState.minutes !== 0)
+      formState.hours !== 0 ||
+      (formState.minutes !== 0 && validate.minute(formState.minutes))
     ) {
       dispatch(
         editTask({
@@ -36,6 +63,8 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
         }),
       );
       onModalClose();
+    } else {
+      setError({ ...errors, minuteError: { status: 'fail', message: 'Укажите время!' } });
     }
   };
   return (
@@ -66,6 +95,11 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
           }
           type='text'
         />
+        <p
+          className={`text-red-700 opacity-0 duration-150 ${errors.titleError?.status === 'fail' && 'opacity-100'}`}
+        >
+          Ошибка: {errors.titleError?.message}
+        </p>
       </fieldset>
       <fieldset className='flex flex-col gap-2'>
         <label htmlFor='form_description'>Описание</label>
@@ -78,6 +112,11 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
             setFormState({ ...formState, description: e.target.value })
           }
         />
+        <p
+          className={`text-red-700 opacity-0 duration-150 ${errors.titleError?.status === 'fail' && 'opacity-100'}`}
+        >
+          Ошибка: {errors.titleError?.message}
+        </p>
       </fieldset>
       <fieldset className='flex flex-col gap-2'>
         <label htmlFor='form_hours'>Часы</label>
@@ -106,6 +145,11 @@ export const EditForm = ({ onModalClose }: IFormProps) => {
           }
           type='number'
         />
+        <p
+          className={`text-red-700 opacity-0 duration-150 ${errors.minuteError?.status === 'fail' && 'opacity-100'}`}
+        >
+          Ошибка: {errors.minuteError?.message}
+        </p>
       </fieldset>
       <Button
         type='submit'
