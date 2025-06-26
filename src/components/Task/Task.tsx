@@ -41,12 +41,12 @@ export const Task = ({ task, openModal }: ITaskProps) => {
       className={`flex w-full flex-col gap-5 rounded-[16px] border-2 border-blue-300 p-5 duration-300 ${isTaskExpired && 'border-red-500'}`}
     >
       <div className='flex w-full justify-between gap-5 rounded-[8px] bg-white p-3'>
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col max-w-3/5 gap-3'>
           <h4>
             <span className='font-bold'>Задача:</span> {task.title}{' '}
             {isTaskExpired && <span className='font-bold'> - просрочена</span>}
           </h4>
-          <span className='max-w 3/5 flex flex-col'>
+          <span className='flex flex-col'>
             <span className='font-bold'>Описание:</span>
             <AnimateHeight
               height={showDescription || task.description.length <= 80 ? 'auto' : 20}
@@ -55,7 +55,7 @@ export const Task = ({ task, openModal }: ITaskProps) => {
               {task.description}{' '}
             </AnimateHeight>
             {task.description.length > 100 && (
-              <button cursor-pointer className='text-left border-b-1 border-transparent duration-150 pb-1 font-bold w-fit cursor-pointer hover:border-black' onClick={() => setShowDescription(!showDescription)}>
+              <button className='text-left border-b-1 border-transparent duration-150 pb-1 font-bold w-fit cursor-pointer hover:border-black' onClick={() => setShowDescription(!showDescription)}>
                 {showDescription ? 'Скрыть описание' : 'Открыть описание'}
               </button>
             )}
