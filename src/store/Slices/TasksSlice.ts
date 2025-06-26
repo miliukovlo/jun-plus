@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 const initialState: ITasksList = {
   list: [],
   activeTaskId: null,
+  editTaskId: null,
 };
 
 export const tasksSlice = createSlice({
@@ -23,8 +24,22 @@ export const tasksSlice = createSlice({
       localStorage.setItem('tasks', JSON.stringify(state.list));
     },
     removeTask: (state, action) => {
-      const { id } = action.payload;
-      state.list = state.list.filter((task) => task.id !== id);
+      state.list = state.list.filter((task) => task.id !== action.payload);
+      state.activeTaskId = null;
+      localStorage.setItem('tasks', JSON.stringify(state.list));
+    },
+    setEditId: (state, action) => {
+      state.editTaskId = action.payload;
+    },
+    editTask: (state, action) => {
+      const { id, title, description, hours, minutes } = action.payload;
+      const task = state.list.find((elem) => elem.id === id);
+      if (task) {
+        task.description = description;
+        task.title = title;
+        task.timeExcept = hours * 60 + minutes;
+      }
+      state.editTaskId = null;
       localStorage.setItem('tasks', JSON.stringify(state.list));
     },
     updateTask: (state) => {
@@ -35,8 +50,7 @@ export const tasksSlice = createSlice({
       localStorage.setItem('tasks', JSON.stringify(state.list));
     },
     startTask: (state, action) => {
-      const { id } = action.payload;
-      state.activeTaskId = id;
+      state.activeTaskId = action.payload;
     },
     stopTask: (state) => {
       state.activeTaskId = null;
@@ -49,5 +63,13 @@ export const tasksSlice = createSlice({
 
 export const tasksReducer = tasksSlice.reducer;
 
-export const { addTask, removeTask, updateTask, startTask, stopTask, setTasks } =
-  tasksSlice.actions;
+export const {
+  addTask,
+  removeTask,
+  updateTask,
+  startTask,
+  stopTask,
+  setTasks,
+  editTask,
+  setEditId,
+} = tasksSlice.actions;

@@ -3,9 +3,9 @@ import { addTask } from '@/store/Slices/TasksSlice';
 import { Button } from '@/UI-KIT';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { IFormProps, IFormState } from './FormTypes';
+import { IFormProps, IFormState } from '../FormTypes';
 
-export const Form = ({ onModalClose }: IFormProps) => {
+export const DefaultForm = ({ onModalClose }: IFormProps) => {
   const dispatch = useDispatch();
   const [formState, setFormState] = useState<IFormState>({
     title: '',

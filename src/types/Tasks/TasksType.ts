@@ -9,4 +9,5 @@ export interface ITask {
 export interface ITasksList {
   list: ITask[];
   activeTaskId: string | null;
+  editTaskId: string | null;
 }
